@@ -150,8 +150,12 @@ class loginViewController: UIViewController{
     //Progress if validation of Email was successful
     @objc
     func emailValidation() {
-        guard let text = emailTextField.text else {return}
+        guard let text = emailTextField.text else {
+            Logger.log("Error: email is empty!")
+            return
+        }
         if !text.ValidEmail() {
+            Logger.log("Error: invalid email")
             emailError.isHidden = false
             
         }else{
@@ -164,8 +168,12 @@ class loginViewController: UIViewController{
     //Progress if validation of Password was successful
     @objc
     func passwordValidation() {
-        guard let password = passwordTextField.text else {return}
+        guard let password = passwordTextField.text else {
+            Logger.log("Error: password is empty!")
+            return
+        }
         if password.count < 6{
+            Logger.log("Error: invalid password")
             passwordError.isHidden = false
         }else{
             progressBar.isHidden = false
@@ -178,9 +186,16 @@ class loginViewController: UIViewController{
     //MARK: Handling login button tap
     @objc
     func loginButtonTapped(_ sender: Any) {
-        guard let email = emailTextField.text, email != "" else {return}
+        guard let email = emailTextField.text, email != "" else {
+            Logger.log("Error while initializing email")
+            return
+        }
         
-        guard let password = passwordTextField.text, password != "" else {return}
+        guard let password = passwordTextField.text, password != "" else {
+            Logger.log("Error while initializing password")
+            return
+            
+        }
         
         progressBar.setProgress(0.8, animated: true)
         
@@ -194,6 +209,7 @@ class loginViewController: UIViewController{
                 if let error = error {
                     print(error.localizedDescription, error._code)
                     if (error._code == 17020){
+                        Logger.log("Error: no internet connection")
                         AlertService.addAlert(in: self, message: "Нет интернет соединения")
                         self.progressBar.setProgress(0, animated: true)
                     }else if error._code == 17009{
@@ -204,6 +220,7 @@ class loginViewController: UIViewController{
                                                             [self.emailTextField, self.emailError, self.passwordTextField, self.passwordError, self.loginButton, self.signUpButton].forEach{$0.alpha = 1}
                                                          }
                             )]
+                        Logger.log("Error: wrong Email or password")
                         AlertService.addAlertWithActions(in: self, title: "Неверный Email или пароль", message: nil, actions: alertAction)
                         self.progressBar.setProgress(0, animated: true)
                     }
@@ -211,9 +228,12 @@ class loginViewController: UIViewController{
                     self.progressBar.setProgress(1, animated: true)
                     UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
                     UserDefaults.standard.synchronize()
-                    
+                    Logger.log("Auth have been complited")
                     UIApplication.shared.windows.filter{$0.isKeyWindow}.first?.rootViewController?.dismiss(animated: true, completion: {
-                        guard let app = UIApplication.shared.delegate as? AppDelegate else {return}
+                        guard let app = UIApplication.shared.delegate as? AppDelegate else {
+                            Logger.log("Error while initializing app")
+                            return}
+                        Logger.log("Error while initializing table cell")
                         app.reloadApp()
                     })
                 }

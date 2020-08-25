@@ -50,6 +50,7 @@ extension MenuViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MenuCell") as? MenuTableViewCell else {
             assertionFailure("Cell is not available")
+            Logger.log("Cell is not available")
             return UITableViewCell()
         }
         cell.selectionStyle = .none

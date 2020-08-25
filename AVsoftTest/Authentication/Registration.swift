@@ -154,20 +154,27 @@ class registrationViewController: UIViewController{
         guard let text = emailTextField.text else {return}
         if !text.ValidEmail() {
             emailError.isHidden = false
+            Logger.log("Email isn't exist")
             
         }else{
             emailError.isHidden = true
+            Logger.log("Email is correct")
         }
     }
     
     //Validation of Password
     @objc
     func passwordValidation() {
-        guard let password = passwordTextField.text else {return}
+        guard let password = passwordTextField.text else {
+            return
+            
+        }
         if password.count < 6{
             passwordError.isHidden = false
+            Logger.log("Password isn't exist")
         }else{
             passwordError.isHidden = true
+            Logger.log("Password is correct")
         }
     }
     
@@ -178,8 +185,10 @@ class registrationViewController: UIViewController{
         guard let passwordConfrim = confirmPassword.text else {return}
         if password != passwordConfrim{
             confirmPasswordError.isHidden = false
+            Logger.log("Email isn't exist")
         }else{
             confirmPasswordError.isHidden = true
+            Logger.log("Email is exist")
         }
     }
     
@@ -210,12 +219,14 @@ class registrationViewController: UIViewController{
                             })
                         ]
                         AlertService.addAlertWithActions(in: self,title: "Ошибка", message: "Ошибка регистрации", actions: actions)
+                        Logger.log("Error: registration error")
                         return
                         
                     } else if(error?._code == 17011) {
                         // All good we can move on
                         self.emailError.isHidden = true
                         if createUser(email: email, password: password){
+                            Logger.log("Registration was successful")
                             AlertService.addAlertWithActions(in: self, title: "Вы успешно зарегистрировались", message: nil, actions: [UIAlertAction(title: "ОК", style: .default, handler: { (_) in
                                 //self.navigationController?.popToRootViewController(animated: true)
                                 self.dismiss(animated: true, completion: nil)

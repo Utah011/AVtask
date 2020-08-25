@@ -18,13 +18,13 @@ func createUser(email:String, password:String) -> Bool{
             return
         }
         guard let uid = result?.user.uid else {
-            print("uid error")
+            Logger.log("Error while receiving uid")
             return
         }
         let values = ["Email":email] as [String : Any]
         Database.database().reference().child(uid).updateChildValues(values) { (error, ref) in
             if let error = error{
-                print("Failed to update data", error.localizedDescription)
+                Logger.log("Failded to update data: \(error.localizedDescription)")
                 return
             }
         }

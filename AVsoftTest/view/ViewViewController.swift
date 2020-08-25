@@ -201,12 +201,14 @@ class ViewViewController: UIViewController {
     func getUserEmail(){
         guard let uid = Auth.auth().currentUser?.uid else {
             assertionFailure("Невозможно получить данные пользователя")
+            Logger.log("Error: unable to get user data")
             return
-        }
-        
+        }        
         Database.database().reference().child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
             if let dictionary = snapshot.value as? [String:Any]{
-                guard let email = dictionary["Email"] else {return}
+                guard let email = dictionary["Email"] else {
+                    Logger.log("Error while initializing email as dictionary")
+                    return}
                 let person = Person()
                 person.email = email as? String
                 self.emailLabel.text = person.email

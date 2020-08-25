@@ -21,7 +21,9 @@ func signOut(vc :UIViewController){
         UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
         UserDefaults.standard.synchronize()
         UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: {
-            guard let app = UIApplication.shared.delegate as? AppDelegate else {return}
+            guard let app = UIApplication.shared.delegate as? AppDelegate else {
+                Logger.log("Error while initializing app")
+                return}
             app.reloadApp()
         })
     } catch {

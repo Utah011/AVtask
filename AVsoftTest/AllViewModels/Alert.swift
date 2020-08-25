@@ -38,8 +38,12 @@ class AlertService {
 
 
         alert.addAction(UIAlertAction(title: "Добавить", style: .default) { (_) in
-            guard let key = alert.textFields?.first?.text, key != "" else {return}
-            guard let val = alert.textFields?[1].text, val != "" else {return}
+            guard let key = alert.textFields?.first?.text, key != "" else {
+                Logger.log("Error while initializing key")
+                return}
+            guard let val = alert.textFields?[1].text, val != "" else {
+                Logger.log("Error while initializing val")
+                return}
             completion(key, val)
         })
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))

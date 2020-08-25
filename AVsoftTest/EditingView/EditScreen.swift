@@ -316,8 +316,8 @@ class EditScreen: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
           imagePicker.dismiss(animated: true, completion: nil)
           guard let image = (info[UIImagePickerController.InfoKey.editedImage] as! UIImage).pngData() else {
-              print("image Error")
-              return
+            Logger.log("Error: no image")
+            return
           }
           profileImageView.image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
           
@@ -381,7 +381,9 @@ class EditScreen: UIViewController, UIImagePickerControllerDelegate, UINavigatio
         secondNameTextField.text = person.first?.secondName
         telephoneNumberTextField.text = person.first?.telephoneNumber
         emailTextField.text = person.first?.email
-        guard let data = person.first?.photo as Data? else {return}
+        guard let data = person.first?.photo as Data? else {
+            Logger.log("Error while initializing user data")
+            return}
         profileImageView.image = UIImage(data: data)
     }
     
@@ -431,10 +433,17 @@ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> 
 }
 
 func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "DopAttribute") as! EditingTableViewCell
+    
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: "DopAttribute") as? EditingTableViewCell else {
+        Logger.log("Error while initializing table cell")
+        return UITableViewCell()
+    }
+    
+    Logger.log("TableViewCell has been successfully initialised")
     cell.backgroundColor = .green
     cell.key.text = attributes[indexPath.row].key
     cell.value.text = attributes[indexPath.row].value
+    
     return cell
 }
 
